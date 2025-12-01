@@ -1,0 +1,11 @@
+# Dependências do Node (são pesadas e instaláveis via npm install)
+node_modules/
+
+# Arquivos de Variáveis de Ambiente (Segurança CRÍTICA)
+.env
+
+# Arquivos de sistema do Mac (Lixo gerado pelo Finder)
+.DS_Store
+
+# Logs de erro (opcional, mas bom ter)
+npm-debug.log*
