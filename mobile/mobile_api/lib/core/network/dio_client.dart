@@ -12,7 +12,6 @@ class DioClient {
 
   late Dio _dio;
   final TokenStorage _tokenStorage = TokenStorage();
-  //IP (iOS: localhost | Android: 10.0.2.2)
   final String _baseUrl = Platform.isAndroid
       ? 'http://10.0.2.2:5000'
       : 'http://localhost:5000';
@@ -52,7 +51,6 @@ class DioClient {
     Response response,
     ResponseInterceptorHandler handler,
   ) async {
-    // Verifica se é uma resposta GraphQL com erro de Auth
     if (response.data != null && response.data['errors'] != null) {
       final errors = response.data['errors'] as List;
       final hasAuthError = errors.any(
@@ -62,40 +60,28 @@ class DioClient {
       );
 
       if (hasAuthError) {
-        print('--- GRAPHQL AUTH ERROR DETECTADO (NO 200 OK) ---');
-
         // Tenta fazer o refresh manualmente aqui
         final newAccessToken = await _performRefreshToken();
 
         if (newAccessToken != null) {
-          print('--- REFRESH SUCESSO (VIA onResponse) - RETENTANDO ---');
-
-          // Atualiza o token na requisição original
           final options = response.requestOptions;
           options.headers['Authorization'] = 'Bearer $newAccessToken';
 
           try {
-            // Retenta a requisição
             final retryResponse = await _dio.fetch(options);
-            return handler.next(
-              retryResponse,
-            ); // Retorna a nova resposta de sucesso
+            return handler.next(retryResponse);
           } catch (e) {
             // Se falhar de novo, deixa passar
           }
         }
       }
     }
-    // Se não for erro de auth, segue a vida normal
     handler.next(response);
   }
 
   void _onError(DioException error, ErrorInterceptorHandler handler) async {
-    print('--- DIO ERROR: ${error.response?.statusCode} ---');
-
     if (error.response?.statusCode == 401 &&
         !error.requestOptions.path.contains('/refresh-token')) {
-      print('--- 401 DETECTADO - TENTANDO REFRESH ---');
       final newAccessToken = await _performRefreshToken();
 
       if (newAccessToken != null) {

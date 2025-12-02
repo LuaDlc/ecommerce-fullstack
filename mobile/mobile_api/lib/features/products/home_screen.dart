@@ -31,7 +31,6 @@ image
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: clientSecret,
           merchantDisplayName: 'Lojinha flutter',
-          // style: ThemeMode.dark,
         ),
       );
       await Stripe.instance.presentPaymentSheet();
@@ -40,11 +39,6 @@ image
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Pagamento realizado com sucesso')),
       );
-
-      // if (kDebugMode) {
-      //   print("Failed to create payment intent: ${response}");
-      // }
-      // return null;
     } on StripeException catch (e) {
       if (kDebugMode) {
         print("Pagemento cancelado ou falhou ${e.error.localizedMessage}");
@@ -53,7 +47,6 @@ image
         context,
       ).showSnackBar(const SnackBar(content: Text('Pagamento Cancelado')));
     } catch (e) {
-      print('Erro Geral: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erro ao processar pagamento')),
       );
@@ -117,9 +110,11 @@ image
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(product['image'] ?? ''),
                         onBackgroundImageError: (exception, stackTrace) {
-                          print(
-                            "Erro ao carregar imagem (ignorado pelo teste): $exception",
-                          );
+                          if (kDebugMode) {
+                            print(
+                              "Erro ao carregar imagem (ignorado pelo teste): $exception",
+                            );
+                          }
                         },
                         child: const Icon(Icons.image_not_supported, size: 16),
                       ),

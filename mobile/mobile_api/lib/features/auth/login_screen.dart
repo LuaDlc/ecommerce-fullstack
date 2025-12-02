@@ -17,7 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() async {
     setState(() => _isLoading = true);
-    print('CHAMANDO AUTH SERVICE...');
     final success = await _authService.login(
       _emailController.text,
       _passwordController.text,
@@ -26,20 +25,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = false);
 
-    // if (success && mounted) {
-    print('ENTRANDO NO IF DE SUCESSO - NAVEGANDO PARA HOME');
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
-    // } else if (mounted) {
-    //   print('CAIU NO ELSE - MOSTRANDO SNACKBAR');
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text('falha ao realizar login. verifique as credenciais'),
-    //     ),
-    //   );
-    // }
+    if (success && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else if (mounted) {
+      print('CAIU NO ELSE - MOSTRANDO SNACKBAR');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('falha ao realizar login. verifique as credenciais'),
+        ),
+      );
+    }
   }
 
   @override

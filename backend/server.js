@@ -14,7 +14,6 @@ const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
 
 if (!JWT_SECRET || !STRIPE_KEY) {
     console.error("ERRO CRÍTICO: Variáveis do .env não foram carregadas!");
-    console.error("Verifique se o arquivo .env existe na pasta backend.");
     process.exit(1); 
 }
 
@@ -155,7 +154,6 @@ async function startServer() {
 
     app.post('/create-payment-intent', async (req, res) => {
         try {
-            console.log("Recebida solicitação de pagamento...");
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: 5000,
                 currency: 'brl',
@@ -179,7 +177,6 @@ async function startServer() {
         resolvers,
         context: ({ req}) => {
             const token = req.headers.authorization || '';
-            console.log('---DEBUG DO HEADER -----');
             console.log('header recebido:', token);
             try {
                 if (token) {

@@ -26,8 +26,6 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    print('--- ETAPA 1: REALIZANDO LOGIN ---');
-
     final textFields = find.byType(TextField);
     final btnEntrar = find.widgetWithText(ElevatedButton, 'ENTRAR');
 
@@ -43,9 +41,6 @@ void main() {
     await tester.pumpAndSettle(const Duration(seconds: 5));
 
     expect(find.text('Produtos'), findsOneWidget);
-    print(' Login realizado com sucesso.');
-
-    print('--- ETAPA 2: SABOTANDO O TOKEN ---');
 
     final storage = TokenStorage();
 
@@ -53,19 +48,12 @@ void main() {
 
     await storage.saveTokens('TOKEN_ESTRAGADO_12345', refreshToken!);
 
-    print('💀 Token de acesso corrompido manualmente.');
-
-    print('--- ETAPA 3: TESTANDO RECUPERAÇÃO AUTOMÁTICA ---');
-
     bool recuperou = false;
     try {
       final response = await DioClient().dio.post(
         '/graphql',
         data: {"query": " { products { name } }"},
       );
-
-      print('Status recebido: ${response.statusCode}');
-      print('Dados recebidos: ${response.data}');
 
       if (response.statusCode == 200 && response.data['data'] != null) {
         recuperou = true;
@@ -84,11 +72,6 @@ void main() {
     );
 
     final newToken = await storage.getAccessToken();
-    print('Token no final do teste: $newToken');
     expect(newToken, isNot('TOKEN_ESTRAGADO_12345'));
-
-    print(
-      ' SUCESSO: O App detectou o erro 401, renovou o token e buscou os dados!',
-    );
   });
 }

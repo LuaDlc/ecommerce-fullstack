@@ -3,10 +3,9 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  createHttpLink // Voltamos a usar createHttpLink na v3, é mais seguro
+  createHttpLink 
 } from '@apollo/client';
 
-// Importação padrão da v3 (sem classes complexas)
 import { setContext } from '@apollo/client/link/context';
 
 import Login from './components/Login';
@@ -14,12 +13,10 @@ import AddProductForm from './components/AddProductForm';
 import ProductList from './components/ProductList';
 import './App.css';
 
-// Configuração do Link HTTP
 const httpLink = createHttpLink({
   uri: 'http://localhost:5000/graphql',
 });
 
-// Configuração da Autenticação (Simples e funcional na v3)
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
   return {
