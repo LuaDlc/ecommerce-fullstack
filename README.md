@@ -30,6 +30,7 @@ Um ecossistema completo de E-commerce com arquitetura de software escalável, au
   ![Stripe](screenshots/app-pagamento.png)
 
 - **Testes:** `Integration Test`, `Flutter Test`.
+  ![testesintegracao](screenshots/testes-integracao-flutter.png)
 
 ### Web Admin (React.js)
 
@@ -44,6 +45,8 @@ Um ecossistema completo de E-commerce com arquitetura de software escalável, au
 - **Server:** Express.js + Apollo Server.
 - **Auth:** `JsonWebToken` (JWT).
 - **Pagamentos:** Stripe SDK.
+- **testes**
+  ![APitestes](screenshots/node-test.png)
 
 ---
 
