@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# E-commerce Full Stack Ecosystem (Flutter + React + Node.js)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Um ecossistema completo de E-commerce com arquitetura de software escalável, autenticação e simulação pagamentos. O projeto consiste em um **Backend GraphQL/REST**, um **App Mobile (Flutter)** para clientes e um **Painel Web (React)** para administração.
 
-## Available Scripts
+## Destaques Técnicos
 
-In the project directory, you can run:
+- ** Autenticação Silenciosa (Silent Refresh):** Implementação simples de JWT com `Access Token` e `Refresh Token`. O App Mobile possui interceptadores HTTP (Dio) que detectam tokens expirados (401), renovam a sessão automaticamente e retentam a requisição original sem deslogar o usuário.
+- ** Pagamentos Reais:** Integração com **Stripe**. O Backend gera `PaymentIntents` seguros e o Frontend mobile finaliza a transação.
 
-### `npm start`
+- ** API Híbrida (REST + GraphQL):**
+  - **REST:** Usado para autenticação segura e webhooks.
+  - **GraphQL:** Usado para busca de dados no catálogo de produtos.
+- **Segurança:** validação de tokens no lado do servidor.
+- **Testes Automatizados (QA):** Suíte de testes de integração no Flutter que valida fluxos críticos, incluindo a "sabotagem" de tokens para garantir a resiliência da autenticação.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Mobile (Flutter)
 
-### `npm test`
+![Login](./screenshots/login-mobile.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Gerenciamento de Estado & API:** `Dio` (com Interceptors Customizados), `GraphQL Flutter`.
+  ![Home](screenshots/app-produtos.png)
+- **Segurança:** `Flutter Secure Storage`.
+- **Pagamentos:** `Flutter Stripe`.
+  ![Stripe](screenshots/app-pagamento.png)
 
-### `npm run build`
+- **Testes:** `Integration Test`, `Flutter Test`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Web Admin (React.js)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Web](screenshots/web-react.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Core:** React Hooks, Functional Components.
+- **Dados:** `Apollo Client` (Gerenciamento de Cache e Queries).
+- **Estilização:** CSS Modules.
 
-### `npm run eject`
+### Backend (Node.js)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Server:** Express.js + Apollo Server.
+- **Auth:** `JsonWebToken` (JWT).
+- **Pagamentos:** Stripe SDK.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Como Rodar o Projeto
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Pré-requisitos
 
-## Learn More
+- Node.js (v18+)
+- Flutter SDK (v3.x)
+- Chaves de Teste do Stripe (Crie uma conta gratuita em stripe.com)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 1. Configurando o Backend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+cd backend
+npm install
+# Crie um arquivo .env na raiz do backend com as chaves:
+# PORT=5000
+# STRIPE_SECRET_KEY=sk_test_...
+# JWT_SECRET=sua_senha_secreta
+# REFRESH_SECRET=sua_senha_refresh
+node server.js
+```

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery, gql } from '@apollo/client';
-import './ProductList.css'; // Importando o CSS
+import './ProductList.css'; 
 
 export const GET_PRODUCTS = gql`
   query GetProducts {
@@ -21,7 +21,7 @@ function ProductList() {
 
   return (
     <div className="product-list-container">
-      <h2>📦 Produtos Atuais</h2>
+      <h2>Produtos Atuais</h2>
       <div className="product-grid">
         {data.products.map(p => (
           <div key={p.id} className="product-card">

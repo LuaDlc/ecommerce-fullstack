@@ -116,6 +116,12 @@ image
                     return ListTile(
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(product['image'] ?? ''),
+                        onBackgroundImageError: (exception, stackTrace) {
+                          print(
+                            "Erro ao carregar imagem (ignorado pelo teste): $exception",
+                          );
+                        },
+                        child: const Icon(Icons.image_not_supported, size: 16),
                       ),
                       title: Text(product['name']),
                       subtitle: Text('R\$ ${product['price']}'),

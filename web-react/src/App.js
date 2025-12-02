@@ -3,25 +3,28 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  HttpLink
+  createHttpLink // Voltamos a usar createHttpLink na v3, é mais seguro
 } from '@apollo/client';
 
-import { SetContextLink } from '@apollo/client/link/context';
+// Importação padrão da v3 (sem classes complexas)
+import { setContext } from '@apollo/client/link/context';
 
 import Login from './components/Login';
 import AddProductForm from './components/AddProductForm';
 import ProductList from './components/ProductList';
 import './App.css';
 
-const httpLink = new HttpLink({
+// Configuração do Link HTTP
+const httpLink = createHttpLink({
   uri: 'http://localhost:5000/graphql',
 });
 
-const authLink = new SetContextLink((context) => {
+// Configuração da Autenticação (Simples e funcional na v3)
+const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
   return {
     headers: {
-      ...context.headers,
+      ...headers,
       authorization: token ? `Bearer ${token}` : "",
     }
   }
@@ -43,7 +46,8 @@ export default function App() {
    <ApolloProvider client={client}>
      <div className="app-container">
       <header className='header'>
-        <h1>Painel administrativo</h1>
+        <h1>Painel Administrativo</h1>
+        
         <button className='btn-logout' onClick={() => {
           localStorage.removeItem('token');
           setIsLoggedIn(false);

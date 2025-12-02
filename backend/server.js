@@ -29,8 +29,8 @@ const users = [
 let refreshTokens = [];
 
 const mockProducts = [
-  { id: '1', name: 'Notebook Gamer', price: 5000.0, image: 'https://via.placeholder.com/150' },
-  { id: '2', name: 'Teclado Mecânico', price: 350.0, image: 'https://via.placeholder.com/150' },
+  { id: '1', name: 'Notebook Gamer', price: 5000.0,  image: 'https://via.placeholder.com/150' },
+  { id: '2', name: 'Teclado Mecânico', price: 350.0,  image: 'https://via.placeholder.com/150'},
   { id: '3', name: 'Monitor 144hz', price: 1200.0, image: 'https://via.placeholder.com/150' },
 ];
 
@@ -64,7 +64,7 @@ const resolvers = {
   Query: {
     products: (parent, args, context) => {
       if (!context.user) throw new Error('Nao autorizado!');
-      return mockProducts; // Retorna a lista atualizada
+      return mockProducts; 
     },
     myCart: (parent, args, context) => {
       if (!context.user) throw new Error('Nao autorizado!');
@@ -119,7 +119,7 @@ async function startServer() {
 
         if(!user) return res.status(401).json({message: 'Credenciais invalidas'});
 
-        const accessToken = jwt.sign({userId: user.id}, JWT_SECRET, { expiresIn: '5h'});
+        const accessToken = jwt.sign({userId: user.id}, JWT_SECRET, { expiresIn: '10s'});
         const refreshToken = jwt.sign({userId: user.id}, REFRESH_SECRET, {expiresIn: '7d'});
 
         refreshTokens.push(refreshToken); //salva refresh token

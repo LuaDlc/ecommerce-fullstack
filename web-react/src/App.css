@@ -20,11 +20,13 @@ body {
   justify-content: center;
   border-bottom: 2px solid #ddd;
   padding-bottom: 20px;
+
 }
 
 .header h1 {
-  margin: 0;
+  margin: 10;
   color: #333;
+  padding: 10px;
 }
 
 .btn-logout {

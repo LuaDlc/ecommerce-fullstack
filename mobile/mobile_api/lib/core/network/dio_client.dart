@@ -28,7 +28,11 @@ class DioClient {
 
     _dio.interceptors.add(
       ///TODO: InterceptorsWrapper => Ele permite injetar as funções (onRequest, onError) diretamente, sem precisar criar uma classe e um arquivo extra só para isso
-      InterceptorsWrapper(onRequest: _onRequest, onError: _onError),
+      InterceptorsWrapper(
+        onRequest: _onRequest,
+        onResponse: _onResponse,
+        onError: _onError,
+      ),
     );
   }
   Dio get dio => _dio;
@@ -44,31 +48,74 @@ class DioClient {
     handler.next(options);
   }
 
-  void _onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401 &&
-        !err.requestOptions.path.contains('/refresh-token')) {
-      try {
-        final newAcessToken = await _performRefreshToken();
-        if (newAcessToken != null) {
-          final options = err.requestOptions;
-          options.headers['Authorization'] = 'Bearer $newAcessToken';
-          final response = await _dio.fetch(options);
-          return handler.resolve(response);
+  void _onResponse(
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) async {
+    // Verifica se é uma resposta GraphQL com erro de Auth
+    if (response.data != null && response.data['errors'] != null) {
+      final errors = response.data['errors'] as List;
+      final hasAuthError = errors.any(
+        (e) =>
+            e['message'].toString().contains('Nao autorizado') ||
+            e['message'].toString().contains('Unauthorized'),
+      );
+
+      if (hasAuthError) {
+        print('--- GRAPHQL AUTH ERROR DETECTADO (NO 200 OK) ---');
+
+        // Tenta fazer o refresh manualmente aqui
+        final newAccessToken = await _performRefreshToken();
+
+        if (newAccessToken != null) {
+          print('--- REFRESH SUCESSO (VIA onResponse) - RETENTANDO ---');
+
+          // Atualiza o token na requisição original
+          final options = response.requestOptions;
+          options.headers['Authorization'] = 'Bearer $newAccessToken';
+
+          try {
+            // Retenta a requisição
+            final retryResponse = await _dio.fetch(options);
+            return handler.next(
+              retryResponse,
+            ); // Retorna a nova resposta de sucesso
+          } catch (e) {
+            // Se falhar de novo, deixa passar
+          }
         }
-      } catch (e) {
-        return _tokenStorage.clearTokens();
       }
     }
+    // Se não for erro de auth, segue a vida normal
+    handler.next(response);
+  }
 
-    handler.next(err);
+  void _onError(DioException error, ErrorInterceptorHandler handler) async {
+    print('--- DIO ERROR: ${error.response?.statusCode} ---');
+
+    if (error.response?.statusCode == 401 &&
+        !error.requestOptions.path.contains('/refresh-token')) {
+      print('--- 401 DETECTADO - TENTANDO REFRESH ---');
+      final newAccessToken = await _performRefreshToken();
+
+      if (newAccessToken != null) {
+        final options = error.requestOptions;
+        options.headers['Authorization'] = 'Bearer $newAccessToken';
+        try {
+          final response = await _dio.fetch(options);
+          return handler.resolve(response);
+        } catch (_) {}
+      }
+    }
+    handler.next(error);
   }
 
   Future<String?> _performRefreshToken() async {
-    final refreshToken = await _tokenStorage.getRefreshToken();
-    if (refreshToken == null) return null;
-
     try {
-      //cria instancia nova pra nao entrar em loop
+      final refreshToken = await _tokenStorage.getRefreshToken();
+      if (refreshToken == null) return null;
+
+      // Cria instância nova para evitar loop
       final tempDio = Dio(BaseOptions(baseUrl: _baseUrl));
       final response = await tempDio.post(
         '/refresh-token',
@@ -80,7 +127,10 @@ class DioClient {
         await _tokenStorage.saveTokens(newAccessToken, refreshToken);
         return newAccessToken;
       }
-    } catch (_) {}
+    } catch (e) {
+      print('Erro no refresh: $e');
+      await _tokenStorage.clearTokens();
+    }
     return null;
   }
 }
