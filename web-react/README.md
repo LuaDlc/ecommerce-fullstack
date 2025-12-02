@@ -1,5 +1,9 @@
 # E-commerce Full Stack Ecosystem (Flutter + React + Node.js)
 
+Desenvolvido por [Seu Nome] como projeto de estudo avançado em arquitetura Full Stack. [LinkedIn](www.linkedin.com/in/luana-dias-linhares
+
+) | [GitHub](https://github.com/LuaDlc)
+
 Um ecossistema completo de E-commerce com arquitetura de software escalável, autenticação e simulação pagamentos. O projeto consiste em um **Backend GraphQL/REST**, um **App Mobile (Flutter)** para clientes e um **Painel Web (React)** para administração.
 
 ## Destaques Técnicos
