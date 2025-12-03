@@ -1,8 +1,7 @@
 # E-commerce Full Stack Ecosystem (Flutter + React + Node.js)
 
-Desenvolvido por [Seu Nome] como projeto de estudo avançado em arquitetura Full Stack. [LinkedIn](www.linkedin.com/in/luana-dias-linhares
+Desenvolvido por Luana como projeto de estudo avançado em arquitetura Full Stack. linkedin: www.linkedin.com/in/luana-dias-linhares
 
-) | [GitHub](https://github.com/LuaDlc)
 
 Um ecossistema completo de E-commerce com arquitetura de software escalável, autenticação e simulação pagamentos. O projeto consiste em um **Backend GraphQL/REST**, um **App Mobile (Flutter)** para clientes e um **Painel Web (React)** para administração.
 
@@ -21,7 +20,7 @@ Um ecossistema completo de E-commerce com arquitetura de software escalável, au
 
 ### Mobile (Flutter)
 
-![Login](./screenshots/login-mobile.png)
+![login](./screenshots/login-mobile.png)
 
 - **Gerenciamento de Estado & API:** `Dio` (com Interceptors Customizados), `GraphQL Flutter`.
   ![Home](screenshots/app-produtos.png)
@@ -56,7 +55,7 @@ Um ecossistema completo de E-commerce com arquitetura de software escalável, au
 
 - Node.js (v18+)
 - Flutter SDK (v3.x)
-- Chaves de Teste do Stripe (Crie uma conta gratuita em stripe.com)
+- Chaves de Teste do Stripe 
 
 ### 1. Configurando o Backend
 
