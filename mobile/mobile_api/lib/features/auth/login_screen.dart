@@ -21,23 +21,21 @@ class _LoginScreenState extends State<LoginScreen> {
       _emailController.text,
       _passwordController.text,
     );
-    print('AUTH SERVICE RETORNOU: $success');
 
     setState(() => _isLoading = false);
 
-    if (success && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    } else if (mounted) {
-      print('CAIU NO ELSE - MOSTRANDO SNACKBAR');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('falha ao realizar login. verifique as credenciais'),
-        ),
-      );
-    }
+    // if (success && mounted) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+    // } else if (mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('falha ao realizar login. verifique as credenciais'),
+      ),
+    );
+    // }
   }
 
   @override

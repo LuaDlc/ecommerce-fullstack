@@ -51,7 +51,6 @@ const typeDefs = gql`
     myCart: Cart 
   }
 
-  # --- NOVO: Permite alterar dados ---
   type Mutation {
     addProduct(name: String!, price: Float!, image: String!): Product
   }
@@ -118,7 +117,7 @@ async function startServer() {
 
         if(!user) return res.status(401).json({message: 'Credenciais invalidas'});
 
-        const accessToken = jwt.sign({userId: user.id}, JWT_SECRET, { expiresIn: '10s'});
+        const accessToken = jwt.sign({userId: user.id}, JWT_SECRET, { expiresIn: '5h'});
         const refreshToken = jwt.sign({userId: user.id}, REFRESH_SECRET, {expiresIn: '7d'});
 
         refreshTokens.push(refreshToken); //salva refresh token
