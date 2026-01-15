@@ -1,113 +1,119 @@
-# E-commerce Full Stack Ecosystem (Flutter + React + Node.js)
+#  Ecommerce Fullstack Ecosystem  
+**Flutter · React · Node.js · GraphQL · Stripe**
 
-Desenvolvido por Luana como projeto de estudo avançado em arquitetura Full Stack. linkedin: www.linkedin.com/in/luana-dias-linhares
+Projeto fullstack desenvolvido por mim com foco em **arquitetura escalável, segurança e integração frontend/backend**.
 
-
-Um ecossistema completo de E-commerce com arquitetura de software escalável, autenticação e simulação pagamentos. O projeto consiste em um **Backend GraphQL/REST**, um **App Mobile (Flutter)** para clientes e um **Painel Web (React)** para administração.
-
-## Destaques Técnicos
-
-- ** Autenticação Silenciosa (Silent Refresh):** Implementação simples de JWT com `Access Token` e `Refresh Token`. O App Mobile possui interceptadores HTTP (Dio) que detectam tokens expirados (401), renovam a sessão automaticamente e retentam a requisição original sem deslogar o usuário.
-- ** Pagamentos Reais:** Integração com **Stripe**. O Backend gera `PaymentIntents` seguros e o Frontend mobile finaliza a transação.
-
-- ** API Híbrida (REST + GraphQL):**
-  - **REST:** Usado para autenticação segura e webhooks.
-  - **GraphQL:** Usado para busca de dados no catálogo de produtos.
-- **Segurança:** validação de tokens no lado do servidor.
-- **Testes Automatizados (QA):** Suíte de testes de integração no Flutter que valida fluxos críticos, incluindo a "sabotagem" de tokens para garantir a resiliência da autenticação.
-
-## Tech Stack
-
-### Mobile (Flutter)
-
-![login](./screenshots/login-mobile.png)
-
-- **Gerenciamento de Estado & API:** `Dio` (com Interceptors Customizados), `GraphQL Flutter`.
-  ![Home](screenshots/app-produtos.png)
-- **Segurança:** `Flutter Secure Storage`.
-- **Pagamentos:** `Flutter Stripe`.
-  ![Stripe](screenshots/app-pagamento.png)
-
-- **Testes:** `Integration Test`, `Flutter Test`.
-  ![testesintegracao](screenshots/testes-integracao-flutter.png)
-
-### Web Admin (React.js)
-
-![Web](screenshots/web-react.png)
-
-- **Core:** React Hooks, Functional Components.
-- **Dados:** `Apollo Client` (Gerenciamento de Cache e Queries).
-- **Estilização:** CSS Modules.
-
-### Backend (Node.js)
-
-- **Server:** Express.js + Apollo Server.
-- **Auth:** `JsonWebToken` (JWT).
-- **Pagamentos:** Stripe SDK.
-- **testes**
-  ![APitestes](screenshots/node-test.png)
+🔗 LinkedIn: https://www.linkedin.com/in/luana-dias-linhares
 
 ---
 
-## Como Rodar o Projeto
+##  Visão Geral
 
-### Pré-requisitos
+Este projeto representa um **ecossistema completo de ecommerce**, composto por:
 
-- Node.js (v18+)
-- Flutter SDK (v3.x)
-- Chaves de Teste do Stripe 
+-  **App Mobile (Flutter)** para clientes
+-  **Painel Web (React)** para administração
+-  **Backend Node.js** com API híbrida (**REST + GraphQL**)
+-  **Pagamentos reais** via Stripe
 
-### 1. Configurando o Backend
+O objetivo principal não é  **demonstrar decisões arquiteturais, segurança e robustez de autenticação** em um ambiente fullstack realista.
 
-```bash
-cd backend
-npm install
-# Crie um arquivo .env na raiz do backend com as chaves:
-# PORT=5000
-# STRIPE_SECRET_KEY=sk_test_...
-# JWT_SECRET=sua_senha_secreta
-# REFRESH_SECRET=sua_senha_refresh
-node server.js
-```
+---
 
+##  Destaques Técnicos
+
+###  Autenticação com Silent Refresh
+- Implementação de **JWT com Access Token + Refresh Token**
+- Interceptors HTTP no Flutter (Dio) detectam `401`
+- Renovação automática de sessão
+- Reexecução da requisição original **sem deslogar o usuário**
+
+![Login](screenshots/login-mobile.png)
+
+---
+
+###  Pagamentos Reais com Stripe
+- Backend gera **PaymentIntents seguros**
+- Frontend mobile finaliza a transação
+- Comunicação segura entre cliente, backend e Stripe
+
+   ![Stripe](screenshots/app-pagamento.png)
+
+---
+
+### API Híbrida (REST + GraphQL)
+- **REST**
+  - Autenticação
+  - Webhooks
+- **GraphQL**
+  - Catálogo de produtos
+  - Queries e mutations otimizadas
+ 
+     ![APitestes](screenshots/node-test.png)
+
+---
+
+###  Testes Automatizados
+- Testes de integração no Flutter
+- Validação de fluxos críticos
+- **Sabotagem proposital de tokens** para validar resiliência da autenticação
+
+
+---
+
+##  Tech Stack
+
+###  Mobile — Flutter
+- HTTP & API: **Dio (Interceptors customizados)**, GraphQL Flutter
+- Segurança: Flutter Secure Storage
+- Pagamentos: Flutter Stripe
+- Testes: Integration Test, Flutter Test
+
+![testesintegracao](screenshots/testes-integracao-flutter.png)
+
+---
+
+
+
+###  Web Admin — React
+- Core: React Hooks, Functional Components
+- Dados: Apollo Client
+- Estilização: CSS Modules
+
+ ![Web](screenshots/web-react.png)
+
+---
+
+###  Backend — Node.js
+- Server: Express.js + Apollo Server
+- Autenticação: JWT
+- Pagamentos: Stripe SDK
+- Persistência: Mock / In-memory (foco em arquitetura)
+
+---
+
+##  Arquitetura Geral
+
+```mermaid
 flowchart TB
-subgraph Client Side ["💻 Client Side (Frontend)"]
-direction LR
-Mobile[("📱 Mobile App<br/>(Flutter + Dio)")];
-Web[("🖥️ Web Admin<br/>(React + Apollo)")];
+subgraph Client Side [" Client Side"]
+    Mobile[" Mobile App (Flutter)"]
+    Web[" Web Admin (React)"]
 end
 
-    subgraph Backend Side ["☁️ Server Side (Node.js)"]
-        direction TB
-        API_Gateway["🚧 API Gateway / Express Server"];
-        AuthService["🔐 Auth Service<br/>(JWT REST)"];
-        GQLService["🚀 Data Service<br/>(GraphQL Resolver)"];
-        DB[("🗄️ Database<br/>(Mock/Memória)")];
-    end
+subgraph Server Side [" Backend (Node.js)"]
+    API[" API Gateway / Express"]
+    Auth[" Auth Service (REST + JWT)"]
+    GQL[" GraphQL Service"]
+    DB[" Database (Mock)"]
+end
 
-    External_Stripe{{"💳 Stripe<br/>(Payment Gateway)"}};
+Stripe[" Stripe"]
 
-    %% --- Fluxos do Mobile ---
-    Mobile -- "1. Login/Refresh (REST)" --> AuthService
-    Mobile -- "3. Busca Produtos (GraphQL Query)" --> GQLService
-    Mobile -- "A. Tokeniza Cartão (HTTPS)" --> External_Stripe
-
-    %% --- Fluxos da Web ---
-    Web -- "Login (REST)" --> AuthService
-    Web -- "Gerencia Produtos (GraphQL Mutation)" --> GQLService
-
-    %% --- Fluxos Internos do Backend ---
-    API_Gateway --> AuthService
-    API_Gateway --> GQLService
-    AuthService <--> DB
-    GQLService <--> DB
-    GQLService -- "B. Cria PaymentIntent (API Key)" --> External_Stripe
-
-    %% --- Estilização ---
-    classDef client fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
-    classDef backend fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    classDef external fill:#fff3e0,stroke:#e65100,stroke-width:2px,stroke-dasharray: 5 5;
-
-    class Mobile,Web client;
-    class AuthService,GQLService,DB,API_Gateway backend;
-    class External_Stripe external;
+Mobile --> Auth
+Mobile --> GQL
+Web --> Auth
+Web --> GQL
+GQL --> DB
+Auth --> DB
+GQL --> Stripe
