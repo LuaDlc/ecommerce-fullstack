@@ -28,7 +28,7 @@ O objetivo principal não é  **demonstrar decisões arquiteturais, segurança e
 - Renovação automática de sessão
 - Reexecução da requisição original **sem deslogar o usuário**
 
-![Login](screenshots/login-mobile.png)
+
 
 ---
 
